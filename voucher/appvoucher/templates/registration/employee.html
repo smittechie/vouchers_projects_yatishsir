@@ -1,0 +1,12 @@
+{%  extends 'registration/base.html' %}
+{% block body %}
+{% if employee %}
+<ul>
+    <li>{{ employee.name }}</li>
+    <li>{{ employee.voucher_employee_have }}</li>
+    <li>{{ employee.voucher }}</li>
+    <li>{{ employee.company }}</li>
+</ul>
+{% endif %}
+
+{% endblock %}
