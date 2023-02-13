@@ -1,0 +1,46 @@
+{%  extends 'registration/base.html' %}
+{% load static %}
+{% block title %}
+<title>Home</title>
+{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'first.css' %}">
+<div class="header">
+    <img src="/static/logo.png" alt="logo" width="84" height="84">
+    <h1>Trootech Business Solutions</h1>
+</div>
+
+
+{% if user.is_authenticated %}
+Hi {{ user.username }}
+<p><a href="{% url 'logout' %}">Log Out</a></p>
+
+<h2>Employee list</h2>
+{% for i in emp %}
+{{ i }}
+<br>
+{% endfor %}
+
+
+
+
+<h2>Voucher list </h2>
+{% for i in vouch %}
+{{ i }}
+<br>
+{% endfor %}
+
+
+{% else %}
+
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log in </a>
+
+{% endif %}
+{% endblock %}
+
+
+
+
