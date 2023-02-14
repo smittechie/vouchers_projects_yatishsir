@@ -5,17 +5,9 @@
 {% endblock %}
 
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'first.css' %}">
-<div class="header">
-    <img src="/static/logo.png" alt="logo" width="84" height="84">
-    <h1>Trootech Business Solutions</h1>
-</div>
+{% block body %}
 
 
-{% if user.is_authenticated %}
-Hi {{ user.username }}
-<p><a href="{% url 'logout' %}">Log Out</a></p>
 
 <h2>Employee list</h2>
 {% for i in emp %}
@@ -25,21 +17,14 @@ Hi {{ user.username }}
 {% endfor %}
 
 
-
-
 <h2>Voucher list </h2>
 {% for i in vouch %}
-{{ i }}
+<a href="{{ i.name }}/">{{ i }}</a>
 <br>
 {% endfor %}
 
 
-{% else %}
 
-<p>You are not logged in</p>
-<a href="{% url 'login' %}">Log in </a>
-
-{% endif %}
 {% endblock %}
 
 
