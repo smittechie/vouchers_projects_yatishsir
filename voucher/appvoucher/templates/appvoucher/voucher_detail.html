@@ -1,0 +1,26 @@
+{%  extends 'appvoucher/base.html' %}
+{% block body %}
+<ul>
+
+
+</ul>
+
+
+
+<h2 align="center">Vouchers list</h2>
+
+<table class="center">
+    <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Quantity</th>
+
+    </tr>
+    <tr>
+    <td>{{ object.name }}</td>
+    <td>{{ object.company }}</td>
+    <td>{{ object.quantity }}</td>
+
+    </tr>
+</table>
+{% endblock %}

@@ -1,0 +1,22 @@
+{%  extends 'appvoucher/base.html' %}
+
+{% block body %}
+
+<h2 align="center">Employee list</h2>
+
+<table class="center">
+    <tr>
+        <th>Name</th>
+
+    </tr>
+    {% for i in employee %}
+    <tr>
+        <td>
+            <a href="{{ i.id }}/">{{ i }}
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock  %}

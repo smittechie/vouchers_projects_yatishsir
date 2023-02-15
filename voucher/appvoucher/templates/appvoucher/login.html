@@ -1,0 +1,44 @@
+{%  extends 'appvoucher/base.html' %}
+
+{% block title %}
+<title>LOGIN</title>
+{% endblock %}
+
+{% block body %}
+
+<!--<form class="form-horizontal" name="LoginForm" action="/login/" method="post" style="margin: auto; width: 220px;">-->
+<!--    {% csrf_token %}-->
+<!--    {% if next %}-->
+<!--    <input type="hidden" name="next" value="{{ next }}"/>-->
+<!--    {% endif %}-->
+<!--    <div class="control-group">-->
+<!--        <label class="control-label" for="username">Username</label>-->
+<!--        <div class="controls">-->
+<!--            <input type="text" id="username" value="{{username}}" placeholder="Username">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="control-group">-->
+<!--        <label class="control-label" for="password">Password</label>-->
+<!--        <div class="controls">-->
+<!--            <input type="password" name="password" id="password" placeholder="Password">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="control-group">-->
+<!--        <div class="controls">-->
+<!--            <button type="submit" class="btn btn-primary">Login</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</form>-->
+
+
+<h2 align="center">Log In</h2>
+<form method="post" style="margin: auto; width: 220px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Log In</button>
+</form>
+{% endblock %}
+
+
+
+

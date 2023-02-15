@@ -1,0 +1,32 @@
+{%  extends 'appvoucher/base.html' %}
+{% load static %}
+{% block title %}
+<title>Home</title>
+{% endblock %}
+
+
+{% block body %}
+
+{% endblock %}
+
+
+
+
+
+
+ {% comment %}
+
+<h2>Employee list</h2>
+{% for i in employee %}
+<a href="{{ i.id }}/">{{ i }}</a>                       ### for rendering employeee list
+<br>
+{% endfor %}
+
+<h2>Voucher list </h2>
+{% for i in voucher %}                                ### for rendering voucher list
+<a href="{{ i.name }}/">{{ i }}</a>
+<br>
+{% endfor %}
+
+
+{% endcomment %}
