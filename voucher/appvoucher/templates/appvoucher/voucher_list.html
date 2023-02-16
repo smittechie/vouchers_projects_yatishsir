@@ -4,22 +4,24 @@
 
 <h2 align="center">Voucher list</h2>
 
-<table class="center" >
+<table class="styled-table">
+    <thead>
     <tr>
         <th>Name</th>
-        </tr>
-
+    </tr>
+    </thead>
+    <tbody>
     {% for i in voucher %}
     <tr>
-    <td>
+        <td>
 
-        <a href="{% url 'voucher' i.id %}">{{ i }}
+            <a href="{% url 'voucher' i.id %}">{{ i }}
             </a>
 
-    </td>
-    {% endfor %}
+        </td>
+        {% endfor %}
     </tr>
-
+    </tbody>
 </table>
 
 {% endblock  %}

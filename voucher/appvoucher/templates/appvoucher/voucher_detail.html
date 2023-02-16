@@ -7,20 +7,24 @@
 
 
 
-<h2 align="center">Vouchers list</h2>
+<h2 align="center">Vouchers Detail</h2>
 
-<table class="center">
+<table class="styled-table">
+    <thead>
     <tr>
         <th>Name</th>
         <th>Company</th>
         <th>Quantity</th>
 
     </tr>
+    </thead>
+    <tbody>
     <tr>
     <td>{{ object.name }}</td>
     <td>{{ object.company }}</td>
     <td>{{ object.quantity }}</td>
 
     </tr>
+    </tbody>
 </table>
 {% endblock %}

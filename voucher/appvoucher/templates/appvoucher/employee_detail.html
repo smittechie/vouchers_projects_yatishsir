@@ -2,16 +2,20 @@
 {% block body %}
 
 
+<h2 align="center">Employee Detail</h2>
 
-<table class="center">
+<table class="styled-table">
+  <thead>
   <tr>
     <th>Name</th>
     <th>Voucher</th>
   </tr>
+  </thead>
+  <tbody>
   <tr>
     <td>{{ context.name }}</td>
     <td>{{ context.voucher }}</td>
   </tr>
-
+</tbody>
 </table>
 {% endblock %}
