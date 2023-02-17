@@ -5,17 +5,33 @@
 <h2 align="center">Employee Detail</h2>
 
 <table class="styled-table">
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Voucher</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>{{ context.name }}</td>
-    <td>{{ context.voucher }}</td>
-  </tr>
-</tbody>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Voucher Name</th>
+        <th>Voucher Company</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ context.id }}</td>
+        <td>{{ context.username }}</td>
+        <td>
+            {% for voucher_detail in context.voucher.all %}
+            {{ voucher_detail.name }},
+            {% endfor %}
+        </td>
+        <td>
+            {% for voucher_detail in context.voucher.all %}
+            {{ voucher_detail.company }},
+            {% endfor %}
+
+        </td>
+
+        <td>{{ context.email }}</td>
+    </tr>
+    </tbody>
 </table>
 {% endblock %}

@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.hashers import make_password           ## make password in hash
+from django.contrib.auth.hashers import make_password  ## make password in hash
 
-#
+
 #
 # # Create your models here.
 class Company(models.Model):
@@ -28,6 +28,8 @@ class Voucher(models.Model):
 #     def __str__(self):
 #         return self.name
 
+
+""" Abstract user Experiment and overriding the abstract user """
 
 from django.db import models
 from django.contrib.auth.models import (
@@ -69,19 +71,21 @@ from django.contrib.auth.models import (
 
 
 class Employee(AbstractUser):
+    username = models.CharField(max_length=25, null=False)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
         unique=True,
     )
+    voucher = models.ManyToManyField(Voucher, related_name='vouchers')
 
     # objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-    def __str__(self):
-        return self.email
+    # def __str__(self):
+    #     return self.email
 
     class Meta:
-        verbose_name ='Employee'
+        verbose_name = 'Employee'

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView, CreateView, FormView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView ,UpdateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from .forms import SignUpForm, LogInForm
@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.http import HttpResponse
 from django.views import View
 from django.http import HttpResponseRedirect
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -52,7 +53,7 @@ def Employee_Detail(request, id):
         employee = None
     # context = {'employee': employee}
     # context = employee
-    # print(context)
+    print(employee)
     return render(request, 'appvoucher/employee_detail.html', {'context': employee})
 
 
@@ -63,7 +64,19 @@ class Employeelist(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(Employeelist, self).get_context_data(*args, **kwargs)
         context['employee'] = Employee.objects.all()
+        print(context)
         return context
+
+class VoucherallotmentView(LoginRequiredMixin,UpdateView):
+    login_url = '/login/'
+    template_name = 'appvoucher/voucherallotment.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VoucherallotmentView, self).get_context_data(*args, **kwargs)
+        context['employee'] = Employee.objects.all()
+        context['voucher'] = Voucher.objects.all()
+        return context
+
 
 
 # def signup_form(self,request):
@@ -71,11 +84,19 @@ class Employeelist(LoginRequiredMixin, TemplateView):
 #     return render(request, template_name='appvoucher/login.html')
 
 
-class SignupForm(CreateView):
+class SignupFormView(CreateView):
     template_name = 'appvoucher/signup.html'
     form_class = SignUpForm
-    success_url = reverse_lazy('login')
+    # success_url = reverse_lazy('login')
 
+    def post(self, request, *args, **kwargs):
+        form = SignUpForm(request.POST)
+        print(request.POST)
+
+        if form.is_valid():
+            Employee.objects.create_user(**form.cleaned_data)
+            return HttpResponseRedirect(reverse_lazy('login'))
+        return render(request, 'appvoucher/signup.html', {'form': form})
 
 '''Trying user creation form '''
 
@@ -90,7 +111,7 @@ def login_user(request):
     if request.POST:
         form = AuthenticationForm(request.POST)
         print(request.POST)
-        username = request.POST['username']
+        username = request.POST['email']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 

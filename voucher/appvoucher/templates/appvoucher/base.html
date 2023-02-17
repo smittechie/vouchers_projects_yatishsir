@@ -60,6 +60,9 @@
             {{ user.username }}
 
             {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+            <a href="{% url 'voucherallotment' %}">Allot Voucher</a>
+            {% endif %}
             <a href="{% url 'logout' %}">Log Out</a>
             {% else %}
             <p>You are not logged in</p>

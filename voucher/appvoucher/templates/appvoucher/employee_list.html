@@ -15,11 +15,10 @@
     {% for i in employee %}
     <tr>
         <td>
-            <a href="{{ i.id }}/">{{ i }}
+            <a href="{{ i.id }}/">{{ i.username }}
             </a>
         </td>
     </tr>
     {% endfor %}
 </table>
-</tbody>
 {% endblock  %}
