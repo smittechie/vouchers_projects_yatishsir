@@ -1,8 +1,8 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Select
 from django import forms
 from django.contrib.auth.models import User
 from . import models
-from .models import Employee
+from .models import Employee, Voucher
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
 
@@ -49,3 +49,19 @@ class LogInForm(forms.Form):
     # class Meta:
     #     model = Employee
     #     fields = ['email','username', 'password']
+
+
+class Voucherallotment_to_id_Form(forms.ModelForm):
+    # voucher = forms.ModelChoiceField(queryset=Voucher.objects.all())
+    voucher = forms.ModelMultipleChoiceField(
+        queryset=Voucher.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Employee
+
+        fields = [
+            "voucher",
+        ]

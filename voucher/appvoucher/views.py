@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView, CreateView, FormView
-from django.views.generic.detail import DetailView ,UpdateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
-from .forms import SignUpForm, LogInForm
+from .forms import SignUpForm, LogInForm, Voucherallotment_to_id_Form
 from .models import Employee, Voucher
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -67,16 +68,69 @@ class Employeelist(LoginRequiredMixin, TemplateView):
         print(context)
         return context
 
-class VoucherallotmentView(LoginRequiredMixin,UpdateView):
+
+# class VoucherallotmentView(LoginRequiredMixin,TemplateView):
+#     login_url = '/login/'
+#     template_name = 'appvoucher/voucherallotment.html'
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(VoucherallotmentView, self).get_context_data(*args, **kwargs)
+#         context['employee'] = Employee.objects.all()
+#         context['voucher'] = Voucher.objects.all()
+#         return context
+
+
+class VoucherallotmentView(LoginRequiredMixin, ListView):
     login_url = '/login/'
+    model = Employee
+    queryset = Employee.objects.all()
+    context_object_name = 'employee'
+    # form_class = Voucherallotment
     template_name = 'appvoucher/voucherallotment.html'
+    # success_url = 'home/'
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(VoucherallotmentView, self).get_context_data(*args, **kwargs)
-        context['employee'] = Employee.objects.all()
-        context['voucher'] = Voucher.objects.all()
-        return context
 
+""" Voucher alloted to the employe id """
+
+
+class Voucherallotment_to_id_View(UpdateView):
+    model = Employee
+    # fields = [
+    #      "voucher",
+    # ]
+    success_url = '/'
+    form_class = Voucherallotment_to_id_Form
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()  ## id of the employee
+        print(self.object.id)
+        print("id of the employee  ")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        print("postt dataaaaaaaaaaaaa  v_list")
+        v_list = request.POST.getlist("voucher")
+
+        vouchers = Voucher.objects.filter(id__in=v_list)
+        # vouchers = Voucher.objects.all()
+        print(vouchers)
+
+        if vouchers:
+            for v in vouchers:
+                print(self.get_object())
+                current_emp = Employee.objects.filter(id=self.get_object().id)
+                print(current_emp.voucher.all())
+                v.voucher -= 1
+                v.save()
+        else:
+            for v in Voucher.objects.exclude(id__in=v_list):
+                v.quantity += 1
+                v.save()
+
+        emp = Employee.objects.get(id=kwargs.get("pk"))
+        emp.voucher.set(v_list)
+        return super().post(request, *args, **kwargs)
 
 
 # def signup_form(self,request):
@@ -87,6 +141,7 @@ class VoucherallotmentView(LoginRequiredMixin,UpdateView):
 class SignupFormView(CreateView):
     template_name = 'appvoucher/signup.html'
     form_class = SignUpForm
+
     # success_url = reverse_lazy('login')
 
     def post(self, request, *args, **kwargs):
@@ -98,6 +153,7 @@ class SignupFormView(CreateView):
             return HttpResponseRedirect(reverse_lazy('login'))
         return render(request, 'appvoucher/signup.html', {'form': form})
 
+
 '''Trying user creation form '''
 
 # class SignupView(CreateView):
@@ -107,6 +163,8 @@ class SignupFormView(CreateView):
 
 
 """ Login Form """
+
+
 def login_user(request):
     if request.POST:
         form = AuthenticationForm(request.POST)
@@ -121,13 +179,13 @@ def login_user(request):
         #     # print(form.cleaned_data)
         #     user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
 
-            # if user is None:
-            #     return render(request, "appvoucher/login.html")
-            # else:
-            #     # print(user)
-            #     messages.error(request, 'username or password not correct')
-            #     login(request, user)
-            # return redirect("home")
+        # if user is None:
+        #     return render(request, "appvoucher/login.html")
+        # else:
+        #     # print(user)
+        #     messages.error(request, 'username or password not correct')
+        #     login(request, user)
+        # return redirect("home")
 
         if user is not None:
             if user.is_active:
@@ -138,9 +196,6 @@ def login_user(request):
             return redirect('login')
     context = {'form': LogInForm}
     return render(request, "appvoucher/login.html", context)
-
-
-
 
 # class LoginView(View):
 #     def get(self, request, *args, **kwargs):

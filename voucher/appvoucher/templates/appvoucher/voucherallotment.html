@@ -1,11 +1,21 @@
 {%  extends 'appvoucher/base.html' %}
 {% block body %}
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>Name</th>
 
-{% for i in employee %}
-{{i}}
-{% endfor %}
-{% for i in voucher %}
-{{i}}
-{% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in employee %}
+    <tr>
+        <td>
+            <a href="{{ i.id }}/">{{ i.username }}
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock  %}

@@ -31,7 +31,6 @@ class Voucher(models.Model):
 
 """ Abstract user Experiment and overriding the abstract user """
 
-from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
@@ -77,7 +76,7 @@ class Employee(AbstractUser):
         max_length=255,
         unique=True,
     )
-    voucher = models.ManyToManyField(Voucher, related_name='vouchers')
+    voucher = models.ManyToManyField(Voucher, related_name="vouchers")
 
     # objects = MyUserManager()
 

@@ -13,5 +13,6 @@ urlpatterns = [
     path('employeelist/', views.Employeelist.as_view(), name='employeelist'),
     path('voucherlist/', views.Voucherlist.as_view(), name='voucherlist'),
     path('voucherallotment/', views.VoucherallotmentView.as_view(), name='voucherallotment'),
+    path('voucherallotment/<int:pk>/', views.Voucherallotment_to_id_View.as_view(), name='voucherallotment_to_id_View'),
 
 ]
