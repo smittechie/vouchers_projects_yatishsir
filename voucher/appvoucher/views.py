@@ -1,3 +1,5 @@
+from itertools import count
+
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView, CreateView, FormView
 from django.views.generic.detail import DetailView
@@ -15,6 +17,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
+from django.db.models import F
 
 
 # Create your views here.
@@ -103,34 +106,52 @@ class Voucherallotment_to_id_View(UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()  ## id of the employee
-        print(self.object.id)
-        print("id of the employee  ")
+        # print(self.object.id)
+        # print("id of the employee  ")
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
-        print("postt dataaaaaaaaaaaaa  v_list")
-        v_list = request.POST.getlist("voucher")
-
-        vouchers = Voucher.objects.filter(id__in=v_list)
-        # vouchers = Voucher.objects.all()
-        print(vouchers)
-
-        if vouchers:
-            for v in vouchers:
-                print(self.get_object())
-                current_emp = Employee.objects.filter(id=self.get_object().id)
-                print(current_emp.voucher.all())
-                v.voucher -= 1
-                v.save()
-        else:
-            for v in Voucher.objects.exclude(id__in=v_list):
-                v.quantity += 1
-                v.save()
-
-        emp = Employee.objects.get(id=kwargs.get("pk"))
-        emp.voucher.set(v_list)
+        v_list = request.POST.getlist("voucher")  ##giving the list of the vouchers
+        # vouchers = Voucher.objects.filter(id__in=v_list)  ## id of boucher in list
+        vouchers = Voucher.objects.all()
+        # for voucher_detail in vouchers:
+        #     print(voucher_detail.quantity)
+        # print(vouchers)
+        # print("current voucherrrrrr")
+        current_emp = Employee.objects.get(id=self.get_object().id)
+        for i in v_list:
+            current_emp = Employee.objects.get(id=self.get_object().id)
+            total = Employee.objects.filter(voucher__id=i).count()
+            for voucher_detail in vouchers:
+                if  total <= voucher_detail.quantity:
+                    print("yes")
+                else:
+                    print("nooo")
         return super().post(request, *args, **kwargs)
+
+
+""" Try to add and delete voucher  """
+
+
+# if vouchers:
+#     current_emp = Employee.objects.get(id = self.get_object().id)
+#     for v in vouchers:
+#         # print(self.get_object())                                          ##getting current user email
+#         # employee = self.get_object().id                                     ##getting the current id
+#         # current_emp = Employee.objects.get(id = self.get_object().id)
+#         current_emp.voucher.add(v)
+#         current_emp.save()
+#         # Employee.objects.filter(id=self.get_object().id).update(voucher=F('voucher') + v)     ##trying new
+#         v.quantity -= 1
+#         v.save()
+# else:
+#     for v in Voucher.objects.exclude(id__in=v_list):
+#         v.quantity += 1
+#         v.save()
+#
+# emp = Employee.objects.get(id=kwargs.get("pk"))
+# emp.voucher.set(v_list)
+# return super().post(request, *args, **kwargs)
 
 
 # def signup_form(self,request):
