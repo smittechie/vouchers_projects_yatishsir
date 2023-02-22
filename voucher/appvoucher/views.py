@@ -18,6 +18,7 @@ from django.views import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
 from django.db.models import F
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 # Create your views here.
@@ -111,22 +112,21 @@ class Voucherallotment_to_id_View(UpdateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        v_list = request.POST.getlist("voucher")  ##giving the list of the vouchers
-        # vouchers = Voucher.objects.filter(id__in=v_list)  ## id of boucher in list
-        vouchers = Voucher.objects.all()
-        # for voucher_detail in vouchers:
-        #     print(voucher_detail.quantity)
-        # print(vouchers)
-        # print("current voucherrrrrr")
-        current_emp = Employee.objects.get(id=self.get_object().id)
+        v_list = request.POST.getlist("voucher")                        ##giving the list of the vouchers
+        vouchers = Voucher.objects.filter(id__in=v_list)                ## id of Voucher in list
+        # current_emp = Employee.objects.get(id=self.get_object().id)
         for i in v_list:
-            current_emp = Employee.objects.get(id=self.get_object().id)
             total = Employee.objects.filter(voucher__id=i).count()
             for voucher_detail in vouchers:
-                if  total <= voucher_detail.quantity:
-                    print("yes")
+
+                if total < voucher_detail.quantity:
+                    print("Yes  you are assigned ")
+                    super().post(request, *args, **kwargs)
                 else:
-                    print("nooo")
+                    print("no -NO boucher ")
+                    messages.error(request, f'You have no Voucher of {voucher_detail} left to gift ')
+                    return render(request, 'appvoucher/errortohome.html')
+
         return super().post(request, *args, **kwargs)
 
 
